@@ -24,7 +24,6 @@ export const login = async(req, res, next)=> {
         const user = await User.findOne({email});
         if(!user) res.status(404).json({message: "user not found"})
         else{
-      console.log(password)
           const userLoggin = await user.comparePassword(password)
            if(!userLoggin) res.status(401).json({message:'Invalid Password'})
            else{
@@ -32,20 +31,20 @@ export const login = async(req, res, next)=> {
            res.status(200).json({message:'user login successfully',jwtToken:token})
         }
     }
-        res.status(200).json({message:'im in login>try'})
+        return res.status(200).json({message:'im in login>try'})
     }
     catch(error){
         console.log(error)
-        res.status(500).json({message:'im in login>catch', errmsg:error.message})
+       return res.status(500).json({message:'im in login>catch', errmsg:error.message})
     }
 }
 
 export const verifyAccount = (req, res, next)=> {
     try{
-        res.status(200).json({message:'im in verify-account>try'})
+       return res.status(200).json({message:'im in verify-account>try'})
     }
     catch(error){
-        res.status(500).json({message:'im in verify-account>catch', errmsg:error.message})
+        return res.status(500).json({message:'im in verify-account>catch', errmsg:error.message})
     }
 }
 
