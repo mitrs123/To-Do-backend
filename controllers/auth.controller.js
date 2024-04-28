@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { sendRes } from "../utils/response.utils.js";
 
 export const signup = async (req, res, next)=> {
     const { name, email, password } = req.body;
@@ -10,11 +11,11 @@ export const signup = async (req, res, next)=> {
         })
         const token = await newUser.generateJWTToken();
         console.log(token)
-        res. status(200).json({message:'user created succesfully', token})
+       sendRes(res,200,{message:"sign up succesfully",token})
     }
     catch(error){
         console.log(error)
-        res.status(500).json({message:'im in signup>catch', errmsg:error.message, stack:error.satck})
+        return res.status(500).json({message:'im in signup>catch', errmsg:error.message, stack:error.satck})
     }
 }
 
@@ -22,16 +23,15 @@ export const login = async(req, res, next)=> {
     const { email, password } = req.body;
     try{
         const user = await User.findOne({email});
-        if(!user) res.status(404).json({message: "user not found"})
+        if(!user) return res.status(404).json({message: "user not found"})
         else{
           const userLoggin = await user.comparePassword(password)
-           if(!userLoggin) res.status(401).json({message:'Invalid Password'})
+           if(!userLoggin) return res.status(401).json({message:'Invalid Password'})
            else{
            const token = await user.generateJWTToken();
-           res.status(200).json({message:'user login successfully',jwtToken:token})
+           return res.status(200).json({message:'user login successfully',jwtToken:token})
         }
     }
-        return res.status(200).json({message:'im in login>try'})
     }
     catch(error){
         console.log(error)
@@ -51,7 +51,7 @@ export const verifyAccount = (req, res, next)=> {
 export const profile = (req, res, next)=> {
     try{
         req.body
-        res.status(200).json({message:'im in profile>try'})
+        return res.status(200).json({message:"i'm in profile/try"})
     }
     catch(error){
         res.status(500).json({message:'im in profile>catch', errmsg:error.message})
